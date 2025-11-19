@@ -24,42 +24,75 @@ Also, initialize a matrix `aux3` to store the cube of the adjacency matrix (i.e.
 ```
 # Reg.No: 212223060057
 # Name: DINESH KUMAR A
-# Ex.No: 18E - Count the Number of Triangles in an Undirected Graph
+# A Python3 program for finding number of
+# triangles in an Undirected Graph. The
+# program is for adjacency matrix
+# representation of the graph
 
-import numpy as np
+# Utility function for matrix
+# multiplication
+def multiply(A, B, C):
+	global V
+	for i in range(V):
+		for j in range(V):
+			C[i][j] = 0
+			for k in range(V):
+				C[i][j] += A[i][k] * B[k][j]
 
-def count_triangles(graph):
-    # Convert graph to numpy array if not already
-    G = np.array(graph)
-    
-    # Compute graph squared and cubed
-    aux2 = np.matmul(G, G)
-    aux3 = np.matmul(aux2, G)
-    
-    # Trace of aux3
-    trace = np.trace(aux3)
-    
-    # Each triangle is counted 6 times
-    num_triangles = trace // 6
-    return int(num_triangles)
+# Utility function to calculate
+# trace of a matrix (sum of
+# diagonal elements)
+def getTrace(graph):
+	global V
+	trace = 0
+	for i in range(V):
+		trace += graph[i][i]
+	return trace
 
-# Example adjacency matrix for an undirected graph
-graph = [
-    [0, 1, 1, 0],
-    [1, 0, 1, 1],
-    [1, 1, 0, 1],
-    [0, 1, 1, 0]
-]
+# Utility function for calculating
+# number of triangles in graph
+def triangleInGraph(graph):
+	global V
+	
+	# To Store graph^2
+	aux2 = [[None] * V for i in range(V)]
 
-print("Number of triangles in the graph:", count_triangles(graph))
+	# To Store graph^3
+	aux3 = [[None] * V for i in range(V)]
+
+	# Initialising aux
+	# matrices with 0
+	for i in range(V):
+		for j in range(V):
+			aux2[i][j] = aux3[i][j] = 0
+
+	# aux2 is graph^2 now printMatrix(aux2)
+	multiply(graph, graph, aux2)
+
+	# after this multiplication aux3 is
+	# graph^3 printMatrix(aux3)
+	multiply(graph, aux2, aux3)
+
+	trace = getTrace(aux3)
+	return trace // 6
+
+# Driver Code
+
+# Number of vertices in the graph
+V = int(input())
+graph = [[0, 1, 1, 0],
+		[1, 0, 1, 1],
+		[1, 1, 0, 1],
+		[0, 1, 1, 0]]
+
+print("Total number of Triangle in Graph :",
+					triangleInGraph(graph))
 
 ```
 
 ## OUTPUT
-```
-Number of triangles in the graph: 2
+<img width="902" height="155" alt="image" src="https://github.com/user-attachments/assets/d29e3bcd-a324-4a2f-a28e-977a1cfd2305" />
 
-```
 
 ## RESULT
 The program successfully calculates and displays the number of triangles in an undirected graph using matrix multiplication.
